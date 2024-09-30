@@ -15,4 +15,5 @@ in
   "openai-token-gep.age".publicKeys = keys;
   "gotosocial.age".publicKeys = keys;
   "borgmatic-raspi.age".publicKeys = keys;
+  "silverbullet.age".publicKeys = keys;
 }

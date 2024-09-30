@@ -52,6 +52,7 @@
     miniflux.file = ./secrets/miniflux.age;
     gotosocial.file = ./secrets/gotosocial.age;
     borgmatic-raspi.file = ./secrets/borgmatic-raspi.age;
+    silverbullet.file = ./secrets/silverbullet.age;
   };
 
   services.avahi.enable = true;
@@ -229,6 +230,17 @@
           };
         };
       };
+      "notes.ymstnt.com" = {
+        enableACME = true;
+        forceSSL = true;
+        locations = {
+          "/" = {
+            proxyPass = "http://${toString config.services.silverbullet.listenAddress}:${toString config.services.silverbullet.listenPort}";
+            recommendedProxySettings = true;
+            proxyWebsockets = true;
+          };
+        };
+      };
     };
   };
 
@@ -254,6 +266,16 @@
       storage-local-base-path = "/var/lib/gotosocial/storage";
     };
     environmentFile = config.age.secrets.gotosocial.path;
+  };
+
+  services.silverbullet = {
+    enable = true;
+    group = "shared";
+    user = "shared";
+    openFirewall = true;
+    listenAddress = "0.0.0.0";
+    listenPort = 3382;
+    envFile = config.age.secrets.silverbullet.path;
   };
 
   security.acme = {
