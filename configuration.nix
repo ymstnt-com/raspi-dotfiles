@@ -52,11 +52,31 @@
     miniflux.file = ./secrets/miniflux.age;
     gotosocial.file = ./secrets/gotosocial.age;
     borgmatic-raspi.file = ./secrets/borgmatic-raspi.age;
-    authelia-jwt.file = ./secrets/authelia-jwt.age;
-    authelia-sekf.file = ./secrets/authelia-sekf.age;
-    authelia-ssf.file = ./secrets/authelia-ssf.age;
-    authelia-hmac.file = ./secrets/authelia-hmac.age;
-    authelia-ipvk.file = ./secrets/authelia-ipvk.age;
+    authelia-jwt = {
+      file = ./secrets/authelia-jwt.age;
+      owner = "authelia-main";
+      group = "authelia-main";
+    };
+    authelia-sekf = {
+      file = ./secrets/authelia-sekf.age;
+      owner = "authelia-main";
+      group = "authelia-main";
+    };
+    authelia-ssf = {
+      file = ./secrets/authelia-ssf.age;
+      owner = "authelia-main";
+      group = "authelia-main";
+    };
+    authelia-hmac = {
+      file = ./secrets/authelia-hmac.age;
+      owner = "authelia-main";
+      group = "authelia-main";
+    };
+    authelia-ipvk = {
+      file = ./secrets/authelia-ipvk.age;
+      owner = "authelia-main";
+      group = "authelia-main";
+    };
     lldap-jwt = {
       file = ./secrets/lldap-jwt.age;
       mode = "0440";
@@ -332,8 +352,8 @@
       jwtSecretFile = config.age.secrets.authelia-jwt.path;
       storageEncryptionKeyFile = config.age.secrets.authelia-sekf.path;
       sessionSecretFile = config.age.secrets.authelia-ssf.path;
-      oidcHmacSecretFile = config.age.secrets.authelia-hmac.path;
-      oidcIssuerPrivateKeyFile = config.age.secrets.authelia-ipvk.path;
+      # oidcHmacSecretFile = config.age.secrets.authelia-hmac.path;
+      # oidcIssuerPrivateKeyFile = config.age.secrets.authelia-ipvk.path;
     };
     settings = {
       theme = "auto";
@@ -366,6 +386,7 @@
           mail_attribute = "mail";
           display_name_attribute = "displayName";
           user = "uid=admin,ou=people,dc=ymstnt,dc=com";
+          password = config.age.secrets.lldap-user-pass.path;
         };
       };
       access_control = {
@@ -426,12 +447,12 @@
   services.lldap = {
     enable = true;
     settings = {
-      http_url = "https://ldap.ymstnt.com";
       ldap_base_dn = "dc=ymstnt,dc=com";
-      key_seed = config.age.secrets.lldap-private-key.path;
+      ldap_user_email = "admin@ymstnt.com";
     };
     environment = {
       LLDAP_JWT_SECRET_FILE = config.age.secrets.lldap-jwt.path;
+      LLDAP_KEY_SEED_FILE = config.age.secrets.lldap-private-key.path;
       LLDAP_LDAP_USER_PASS_FILE = config.age.secrets.lldap-user-pass.path;
     };
   };
