@@ -276,6 +276,10 @@
     listenAddress = "0.0.0.0";
     listenPort = 3382;
     envFile = config.age.secrets.silverbullet.path;
+    # TODO: remove after https://github.com/NixOS/nixpkgs/issues/354003
+    package = pkgs.silverbullet.override {
+      deno = pkgs.deno_1;
+    };
   };
 
   security.acme = {
