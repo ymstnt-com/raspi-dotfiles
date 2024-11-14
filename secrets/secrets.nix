@@ -21,4 +21,6 @@ in
   "authelia-ssf.age".publicKeys = keys;
   "authelia-hmac.age".publicKeys = keys;
   "authelia-ipvk.age".publicKeys = keys;
+  "authelia-smtp.age".publicKeys = keys;
+  "authelia-opt.age".publicKeys = keys;
 }

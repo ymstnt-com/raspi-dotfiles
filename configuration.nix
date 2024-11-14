@@ -79,6 +79,16 @@
       owner = "authelia-main";
       group = "authelia-main";
     };
+    authelia-smtp = {
+      file = ./secrets/authelia-smtp.age;
+      owner = "authelia-main";
+      group = "authelia-main";
+    };
+    authelia-opt = {
+      file = ./secrets/authelia-opt.age;
+      owner = "authelia-main";
+      group = "authelia-main";
+    };
   };
 
   services.avahi.enable = true;
@@ -192,7 +202,7 @@
         '';
         autheliaLocationConfig = ''
           internal;
-          set $upstream_authelia http://127.0.0.1:9091/api/verify;
+          set $upstream_authelia http://127.0.0.1:9092/api/verify;
           proxy_pass_request_body off;
           proxy_pass $upstream_authelia;    
           proxy_set_header Content-Length "";
@@ -336,7 +346,7 @@
         enableACME = true;
         forceSSL = true;
         locations."/" = {
-          proxyPass = "http://127.0.0.1:9091";
+          proxyPass = "http://127.0.0.1:9092";
           proxyWebsockets = true;
         };
      };
@@ -352,12 +362,16 @@
       # oidcHmacSecretFile = config.age.secrets.authelia-hmac.path;
       # oidcIssuerPrivateKeyFile = config.age.secrets.authelia-ipvk.path;
     };
+    settingsFiles = [
+      config.age.secrets.authelia-opt.path
+    ];
+    environmentVariables = {
+      AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = config.age.secrets.authelia-smtp.path;
+    };
     settings = {
       theme = "auto";
       default_2fa_method = "totp";
-      server = {
-        host = "localhost";
-      };
+      server.address = "tcp://127.0.0.1:9092/";
       log.level = "info";
       regulation = {
         max_retries = 3;
@@ -410,8 +424,8 @@
         };
       };
       notifier = {
-        filesystem = {
-          filename = "/var/lib/authelia-main/notifications.txt";
+        smtp = {
+          address = "smtp://smtp.eu.mailgun.org:587";
         };
       };
     };
