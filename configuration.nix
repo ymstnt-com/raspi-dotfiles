@@ -42,6 +42,7 @@
     " d    /var/moe                       0750 moe    shared"
     " d    /var/www/ymstnt.com            2770 nginx  shared"
     " d    /var/www/ymstnt.com-generated  0775 shared shared"
+    " d    /var/lib/authelia-main         0775 authelia-main authelia-main"
   ];
 
   age.secrets = {
@@ -77,21 +78,6 @@
       file = ./secrets/authelia-ipvk.age;
       owner = "authelia-main";
       group = "authelia-main";
-    };
-    lldap-jwt = {
-      file = ./secrets/lldap-jwt.age;
-      mode = "0440";
-      group = "lldap";
-    };
-    lldap-private-key = {
-      file = ./secrets/lldap-private-key.age;
-      mode = "0440";
-      group = "lldap";
-    };
-    lldap-user-pass = { 
-      file = ./secrets/lldap-user-pass.age;
-      mode = "0440";
-      group = "lldap";
     };
   };
 
@@ -381,23 +367,8 @@
       totp.issuer = "authelia.com";
       authentication_backend = {
         password_reset.disable = false;
-        refresh_interval = "1m";
-        ldap = {
-          implementation = "custom";
-          url = "ldap://localhost:3890";
-          timeout = "5m";
-          start_tls = false;
-          base_dn = "dc=ymstnt,dc=com";
-          username_attribute = "uid";
-          additional_users_dn = "people";
-          users_filter = "(&({username_attribute}={input})(objectClass=person))";
-          #additional_groupd_dn = "ou=groups";
-          groups_filter = "(member={dn})";
-          group_name_attribute = "cn";
-          mail_attribute = "mail";
-          display_name_attribute = "displayName";
-          user = "uid=admin,ou=people,dc=ymstnt,dc=com";
-          password = config.age.secrets.lldap-user-pass.path;
+        file = {
+          path = "/var/lib/authelia-main/users.yml";
         };
       };
       access_control = {
@@ -443,19 +414,6 @@
           filename = "/var/lib/authelia-main/notifications.txt";
         };
       };
-    };
-  };
-
-  services.lldap = {
-    enable = true;
-    settings = {
-      ldap_base_dn = "dc=ymstnt,dc=com";
-      ldap_user_email = "admin@ymstnt.com";
-    };
-    environment = {
-      LLDAP_JWT_SECRET_FILE = config.age.secrets.lldap-jwt.path;
-      LLDAP_KEY_SEED_FILE = config.age.secrets.lldap-private-key.path;
-      LLDAP_LDAP_USER_PASS_FILE = config.age.secrets.lldap-user-pass.path;
     };
   };
 
@@ -631,18 +589,10 @@
       isSystemUser = true;
       group = "shared";
     };
-    lldap = {
-      isSystemUser = true;
-      group = "lldap";
-      extraGroups = [
-        "shared"
-      ];
-    };
   };
 
   users.groups = {
     shared = { };
-    lldap = { };
   };
 
   moe = {

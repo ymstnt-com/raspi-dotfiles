@@ -21,7 +21,4 @@ in
   "authelia-ssf.age".publicKeys = keys;
   "authelia-hmac.age".publicKeys = keys;
   "authelia-ipvk.age".publicKeys = keys;
-  "lldap-jwt.age".publicKeys = keys;
-  "lldap-user-pass.age".publicKeys = keys;
-  "lldap-private-key.age".publicKeys = keys;
 }
