@@ -402,6 +402,7 @@
         inactivity = "45m";
         remember_me_duration = "1M";
         domain = "ymstnt.com";
+        redis.host = "/run/redis-authelia-main/redis.sock";
       };
       storage = {
         local = {
@@ -409,12 +410,19 @@
         };
       };
       notifier = {
-        disable_startup_check = false;
         filesystem = {
           filename = "/var/lib/authelia-main/notifications.txt";
         };
       };
     };
+  };
+
+  services.redis.servers.authelia-main = {
+    enable = true;
+    user = "authelia-main";
+    port = 0;
+    unixSocket = "/run/redis-authelia-main/redis.sock";
+    unixSocketPerm = 600;
   };
 
   services.miniflux = {
