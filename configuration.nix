@@ -359,8 +359,8 @@
       jwtSecretFile = config.age.secrets.authelia-jwt.path;
       storageEncryptionKeyFile = config.age.secrets.authelia-sekf.path;
       sessionSecretFile = config.age.secrets.authelia-ssf.path;
-      # oidcHmacSecretFile = config.age.secrets.authelia-hmac.path;
-      # oidcIssuerPrivateKeyFile = config.age.secrets.authelia-ipvk.path;
+      oidcHmacSecretFile = config.age.secrets.authelia-hmac.path;
+      oidcIssuerPrivateKeyFile = config.age.secrets.authelia-ipvk.path;
     };
     settingsFiles = [
       config.age.secrets.authelia-opt.path
@@ -416,6 +416,8 @@
         inactivity = "45m";
         remember_me_duration = "1M";
         domain = "ymstnt.com";
+        authelia_url = "https://auth.ymstnt.com";
+        default_redirection_url = "https://ymstnt.com";
         redis.host = "/run/redis-authelia-main/redis.sock";
       };
       storage = {
