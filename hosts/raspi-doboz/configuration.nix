@@ -1,9 +1,13 @@
 { lib, pkgs, ... }:
 
+let
+  modules = import ../../modules;
+in
 {
-  imports = [
-    ./hardware-configuration.nix
-  ];
+  imports =
+    [ ./hardware-configuration.nix ]
+    ++ modules.allModulesExcept [
+    ];
 
   boot = {
     # rpi kernel set from nixos-hardware fails with EFI stub error on boot

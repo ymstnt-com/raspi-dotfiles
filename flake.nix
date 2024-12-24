@@ -68,7 +68,6 @@
         home-manager.nixosModule
         moe.nixosModule
         lix-module.nixosModules.lixFromNixpkgs
-        ./configuration.nix
         ./hosts/raspi-doboz/configuration.nix
       ];
       specialArgs = inputs;
