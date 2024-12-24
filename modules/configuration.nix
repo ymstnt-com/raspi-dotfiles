@@ -126,17 +126,6 @@
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 
-  services.openssh = {
-    enable = true;
-    ports = [ 42727 ];
-    settings = {
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
-      PermitRootLogin = "no";
-      X11Forwarding = true;
-    };
-  };
-
   environment.shellInit = "umask 002";
   users.users = {
     shared = {
